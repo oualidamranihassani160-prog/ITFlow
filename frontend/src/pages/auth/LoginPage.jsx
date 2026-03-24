@@ -57,11 +57,11 @@ export default function LoginPage() {
         <p className="text-xs font-semibold text-app-secondary mb-2">Demo accounts (password: <code className="font-mono bg-white/60 dark:bg-black/20 px-1 py-0.5 rounded">password</code>)</p>
         <div className="flex flex-wrap gap-2">
           {[
-            { label: 'Admin', email: 'oualidamranihassani160@gmail.com' },
-            { label: 'Manager1', email: 'ayoubamrani@gmail.com' },
-            { label: 'Manager2', email: 'm.ajerdane@gmail.com' },
-            { label: 'Employee1', email: 'n.hamoudi@gmail.com' },
-            { label: 'Employee2', email: 'o.amrani@gmail.com' },
+            { label: 'Admin', email: 'admin@itflow.com' },
+            { label: 'Manager1', email: 'sarah.mitchell@itflow.com' },
+            { label: 'Manager2', email: 'james.carter@itflow.com' },
+            { label: 'Employee1', email: 'employee1@itflow.com' },
+            { label: 'Employee2', email: 'employee2@itflow.com' },
           ].map(({ label, email }) => (
             <button key={label} type="button" onClick={() => demoLogin(email)}
               className="text-xs px-3 py-1.5 rounded-lg font-medium transition-all"
