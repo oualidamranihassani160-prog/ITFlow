@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Message;
-use App\Models\MessageRead;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -86,72 +84,5 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info("Seeded: 1 admin, " . count($managers) . " managers, " . count($employees) . " employees, and {$taskCount} tasks.");
-        // --- Messages seeding (some group + private messages) ---
-        $allUsers = array_merge([$admin], $managers, $employees);
-
-        // Create some group messages for team
-        $teamGroupCount = 50;
-        for ($i = 0; $i < $teamGroupCount; $i++) {
-            $sender = $allUsers[array_rand($allUsers)];
-            $managerId = $sender->isManager() ? $sender->id : $sender->manager_id;
-            Message::create([
-                'sender_id' => $sender->id,
-                'manager_id' => $managerId,
-                'body' => "Team message {$i} — automated",
-                'is_group' => true,
-                'is_managers_group' => false,
-                'read_at' => null,
-            ]);
-        }
-
-        // Create some managers-group messages (managers & admin)
-        $managersGroupCount = 40;
-        for ($i = 0; $i < $managersGroupCount; $i++) {
-            // pick sender that is manager or admin
-            $pool = array_merge([$admin], $managers);
-            $sender = $pool[array_rand($pool)];
-            $managerId = $sender->isManager() ? $sender->id : null;
-            Message::create([
-                'sender_id' => $sender->id,
-                'manager_id' => $managerId,
-                'body' => "Managers group message {$i} — automated",
-                'is_group' => true,
-                'is_managers_group' => true,
-                'read_at' => null,
-            ]);
-        }
-
-        // Create private messages between random users
-        $privateCount = 120;
-        $createdMessages = [];
-        for ($i = 0; $i < $privateCount; $i++) {
-            $sender = $allUsers[array_rand($allUsers)];
-            // pick a receiver not equal to sender
-            do { $receiver = $allUsers[array_rand($allUsers)]; } while ($receiver->id === $sender->id);
-            $managerId = $sender->isManager() ? $sender->id : ($sender->manager_id ?? $receiver->manager_id);
-            $msg = Message::create([
-                'sender_id' => $sender->id,
-                'receiver_id' => $receiver->id,
-                'manager_id' => $managerId,
-                'body' => "Private message {$i} from {$sender->name} to {$receiver->name}",
-                'is_group' => false,
-                'is_managers_group' => false,
-                'read_at' => rand(0, 1) ? now() : null,
-            ]);
-            $createdMessages[] = $msg;
-        }
-
-        // Create some MessageRead rows marking a subset as read by receiver
-        $readsToCreate = min(60, count($createdMessages));
-        for ($i = 0; $i < $readsToCreate; $i++) {
-            $m = $createdMessages[array_rand($createdMessages)];
-            MessageRead::create([
-                'message_id' => $m->id,
-                'user_id' => $m->receiver_id,
-                'read_at' => now(),
-            ]);
-        }
-
-    $this->command->info("Seeded: 1 admin, " . count($managers) . " managers, " . count($employees) . " employees, " . $taskCount . " tasks, and seeded group + private messages.");
     }
 }
