@@ -10,8 +10,8 @@ class MessageRead extends Model
 
     protected $fillable = ['message_id', 'user_id', 'read_at'];
 
-    protected function casts(): array
-    {
-        return ['read_at' => 'datetime'];
-    }
+    // Ensure Eloquent casts the read_at column to a DateTime instance
+    protected $casts = [
+        'read_at' => 'datetime',
+    ];
 }
