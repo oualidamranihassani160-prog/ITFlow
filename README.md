@@ -21,7 +21,7 @@ Make sure you have the following installed on your machine:
 Clone the repository and open a terminal in the project root:
 
 ```bash
-git clone <your-repo-url> itflow
+git clone https://github.com/oualidamranihassani160-prog/ITFlow.git
 cd itflow
 ```
 
